@@ -9,7 +9,7 @@ public class TestOffByOne {
     static Palindrome palindrome = new Palindrome();
 
     @Test
-    public void testOffByOne() {
+    public void testComparator() {
         assertFalse(palindrome.isPalindrome("cat", offByOne));
         assertTrue(palindrome.isPalindrome("a", offByOne));
         assertTrue(palindrome.isPalindrome("flake", offByOne));
