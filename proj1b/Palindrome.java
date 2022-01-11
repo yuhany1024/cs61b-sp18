@@ -11,7 +11,7 @@ public class Palindrome {
 
     public boolean isPalindrome(String word) {
         Deque<Character> d = wordToDeque(word);
-        for (int i = 0; i < word.length()/2; i += 1) {
+        for (int i = 0; i < word.length() / 2; i += 1) {
             Character c1 = word.charAt(i);
             Character c2 = d.removeLast();
             if (c1 != c2) {
@@ -24,7 +24,7 @@ public class Palindrome {
 
     public boolean isPalindrome(String word, CharacterComparator cc) {
         Deque<Character> d = wordToDeque(word);
-        for (int i = 0; i < word.length()/2; i += 1) {
+        for (int i = 0; i < word.length() / 2; i += 1) {
             Character c1 = word.charAt(i);
             Character c2 = d.removeLast();
             if (!cc.equalChars(c1, c2)) {
