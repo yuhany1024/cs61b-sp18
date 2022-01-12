@@ -11,8 +11,13 @@ public class TestOffByOne {
     @Test
     public void testComparator() {
         assertFalse(palindrome.isPalindrome("cat", offByOne));
+        assertFalse(palindrome.isPalindrome("tac", offByOne));
+        assertFalse(palindrome.isPalindrome("%)", offByOne));
         assertTrue(palindrome.isPalindrome("a", offByOne));
         assertTrue(palindrome.isPalindrome("flake", offByOne));
+        assertTrue(palindrome.isPalindrome("ekalf", offByOne));
+        assertTrue(palindrome.isPalindrome("FlakE", offByOne));
+        assertTrue(palindrome.isPalindrome("%lak&", offByOne));
     }
 
 }
