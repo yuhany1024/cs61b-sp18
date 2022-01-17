@@ -2,7 +2,14 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
-import java.io.*;
+import java.io.Serializable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public class Game implements Serializable {
     TERenderer ter = new TERenderer();
@@ -43,7 +50,7 @@ public class Game implements Serializable {
         world.movePlayer(playerPath);
         // save the world
         if (input.charAt(input.length() - 2) == ':') {
-            saveWorld(world);
+            saveWorld();
         }
 
         return world.tiles;
@@ -80,7 +87,7 @@ public class Game implements Serializable {
 
     }
 
-    private void saveWorld(World world) {
+    private void saveWorld() {
         File f = new File("./world.txt");
         try {
             FileOutputStream fs = new FileOutputStream(f);

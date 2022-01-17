@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Hallway implements Serializable {
     // generate  L-shaped hallways
-    public List<Position> pixels;
+    protected List<Position> pixels;
 
     public Hallway(Position start, Position end) {
         pixels = new LinkedList<>();

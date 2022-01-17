@@ -9,16 +9,16 @@ import java.util.List;
 import java.io.Serializable;
 
 public class World implements Serializable {
-    public final int WIDTH;
-    public final int HEIGHT;
-    public final Random RANDOM;
+    protected final int WIDTH;
+    protected final int HEIGHT;
+    protected final Random RANDOM;
     private List<Room> roomList;
     private List<Hallway> hallwayList;
     private List<Position> wallList = new LinkedList<>();
     private Position door;
     private Position player;
 
-    public TETile[][] tiles;
+    protected TETile[][] tiles;
 
 
     public World(int width, int height, long seed) {
@@ -33,7 +33,7 @@ public class World implements Serializable {
         // generate hallways
         hallwayList = Hallway.generateHallways(roomList, RANDOM);
         // print floors
-        printFloors(roomList, hallwayList);
+        printFloors(hallwayList);
         // generate and print walls
         generateWalls();
         // get Door and player
@@ -50,7 +50,7 @@ public class World implements Serializable {
         }
     }
 
-    private void printFloors(List<Room> roomList, List<Hallway> hallways) {
+    private void printFloors(List<Hallway> hallways) {
         for (Room room:  roomList) {
             fillRoomTiles(room);
         }
@@ -141,7 +141,6 @@ public class World implements Serializable {
                     nextX += 1;
                     break;
                 default:
-                    System.out.println("Unrecognized path!");
             }
             if (tiles[nextX][nextY].character() == 183 || tiles[nextX][nextY].character() == 9608) {
                 tiles[player.x][player.y] =  Tileset.FLOOR;

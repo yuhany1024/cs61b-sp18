@@ -6,9 +6,9 @@ import java.util.Random;
 import java.io.Serializable;
 
 public class Room implements Comparable<Room>, Serializable {
-    public Position pos;
-    public int width;
-    public int height;
+    protected Position pos;
+    protected int width;
+    protected int height;
 
     public Room(Position pos, int width, int height) {
         this.pos = pos;
