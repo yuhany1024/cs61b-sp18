@@ -32,11 +32,11 @@ public class Game implements Serializable {
     public TETile[][] playWithInputString(String input) {
         input = input.toLowerCase();
         // initialize the world
-        if (input.charAt(0) == 'n') { // new world
+        if (input.charAt(0) == 'l') { // load the world
+            world = loadWorld();
+        } else {
             long seed = getSeed(input);
             world = new World(WIDTH, HEIGHT, seed);
-        } else if (input.charAt(0) == 'l') { // load the world
-            world = loadWorld();
         }
         // get player's position
         String playerPath = getPlayerPath(input);
@@ -50,11 +50,13 @@ public class Game implements Serializable {
     }
 
     private long getSeed(String input) {
-        int index = 1;
-        while (input.charAt(index) != 's') {
-            index += 1;
+        long seed = 0;
+        for (int i = 0; i < input.length(); i += 1) {
+            if (Character.isDigit(input.charAt(i))) {
+                seed = 10 * seed + Long.parseLong("" + input.charAt(i));
+            }
         }
-        return Integer.parseInt(input.substring(1, Math.min(index, input.length())));
+        return seed;
     }
 
     private String getPlayerPath(String input) {
