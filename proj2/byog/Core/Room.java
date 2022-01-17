@@ -23,9 +23,9 @@ public class Room implements Comparable<Room>, Serializable {
 
     public static List<Room> generateRoomList(World world) {
         Random random = world.RANDOM;
-        int nRoom = random.nextInt(30,70);
+        int nRoom = random.nextInt(40)  + 30;
         List<Room> roomList = new LinkedList<>();
-        for (int i =0; i < nRoom; i++) {
+        for (int i = 0; i < nRoom; i++) {
             Room room = randomRoom(world);
             roomList.add(room);
         }
@@ -35,10 +35,10 @@ public class Room implements Comparable<Room>, Serializable {
 
     private static Room randomRoom(World world) {
         Random random = world.RANDOM;
-        int roomX = random.nextInt(3,world.WIDTH-8);
-        int roomY = random.nextInt(3, world.HEIGHT-8);
-        int roomWidth = random.nextInt(3, 7);
-        int roomHeight = random.nextInt(3, 7);
+        int roomX = random.nextInt(world.WIDTH - 10) + 3;
+        int roomY = random.nextInt(world.HEIGHT - 10) + 3;
+        int roomWidth = random.nextInt(4) + 3;
+        int roomHeight = random.nextInt(4) + 3;
         Position roomPos = new Position(roomX, roomY);
         return new Room(roomPos, roomWidth, roomHeight);
     }

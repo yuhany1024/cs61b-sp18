@@ -9,7 +9,7 @@ public class Game implements Serializable {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    public static World world;
+    private static World world;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -30,9 +30,6 @@ public class Game implements Serializable {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
-        // and return a 2D tile representation of the world that would have been
-        // drawn if the same inputs had been given to playWithKeyboard().
         input = input.toLowerCase();
         // initialize the world
         if (input.charAt(0) == 'n') { // new world
@@ -45,7 +42,7 @@ public class Game implements Serializable {
         String playerPath = getPlayerPath(input);
         world.movePlayer(playerPath);
         // save the world
-        if (input.charAt(input.length()-2) == ':') {
+        if (input.charAt(input.length() - 2) == ':') {
             saveWorld(world);
         }
 
@@ -54,26 +51,26 @@ public class Game implements Serializable {
 
     private long getSeed(String input) {
         int index = 1;
-        while(input.charAt(index) != 's') {
+        while (input.charAt(index) != 's') {
             index += 1;
         }
-        return Integer.parseInt(input.substring(1,Math.min(index, input.length())));
+        return Integer.parseInt(input.substring(1, Math.min(index, input.length())));
     }
 
     private String getPlayerPath(String input) {
         if (input.charAt(0) == 'n') {
             int start = 1;
-            while(start < input.length() && input.charAt(start) != 's') {
+            while (start < input.length() && input.charAt(start) != 's') {
                 start += 1;
             }
-            if (input.charAt(input.length()-2) == ':') {
-                return input.substring(start+1, input.length()-2);
+            if (input.charAt(input.length() - 2) == ':') {
+                return input.substring(start + 1, input.length() - 2);
             } else {
-                return input.substring(start+1, input.length());
+                return input.substring(start + 1, input.length());
             }
         } else {
-            if (input.charAt(input.length()-2) == ':') {
-                return input.substring(1, input.length()-2);
+            if (input.charAt(input.length() - 2) == ':') {
+                return input.substring(1, input.length() - 2);
             } else {
                 return input.substring(1, input.length());
             }

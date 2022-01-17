@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.io.Serializable;
 
-public class Hallway implements Serializable{
+public class Hallway implements Serializable {
     // generate  L-shaped hallways
     public List<Position> pixels;
 
@@ -27,9 +27,9 @@ public class Hallway implements Serializable{
     public static List<Hallway> generateHallways(List<Room> roomList, Random random) {
         List<Hallway> hallways = new LinkedList<>();
         for (int i = 1; i < roomList.size(); i++) {
-            Room room1 = roomList.get(i-1);
+            Room room1 = roomList.get(i - 1);
             Room room2 = roomList.get(i);
-            Position start = randomPos(room1,random);
+            Position start = randomPos(room1, random);
             Position end = randomPos(room2, random);
             hallways.add(new Hallway(start, end));
         }
@@ -42,17 +42,17 @@ public class Hallway implements Serializable{
         int x, y;
         switch (flag) {
             case 0:
-                y = random.nextInt(room.pos.y, room.pos.y+room.height);
+                y = random.nextInt(room.height) + room.pos.y;
                 return new Position(room.pos.x, y);
             case 1:
-                x = random.nextInt(room.pos.x, room.pos.x+room.width);
+                x = random.nextInt(room.width) + room.pos.x;
                 return new Position(x, room.pos.y);
             case 2:
-                y = random.nextInt(room.pos.y, room.pos.y+room.height);
-                return new Position(room.pos.x+ room.width-1, y);
+                y = random.nextInt(room.height) + room.pos.y;
+                return new Position(room.pos.x + room.width - 1, y);
             case 3:
-                x = random.nextInt(room.pos.x, room.pos.x+room.width);
-                return new Position(x, room.pos.y+ room.height-1);
+                x = random.nextInt(room.width) + room.pos.x;
+                return new Position(x, room.pos.y + room.height - 1);
             default:
                 return null;
         }

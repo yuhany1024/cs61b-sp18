@@ -70,7 +70,7 @@ public class World implements Serializable {
 
     private void fillHallwayTiles(Hallway h) {
         for (Position p: h.pixels) {
-            tiles[p.x][p.y] = Tileset.FLOOR;;
+            tiles[p.x][p.y] = Tileset.FLOOR;
         }
     }
 
@@ -90,14 +90,14 @@ public class World implements Serializable {
             return false;
         }
 
-        return tiles[x-1][y] == Tileset.FLOOR ||
-                tiles[x+1][y] == Tileset.FLOOR ||
-                tiles[x][y-1] == Tileset.FLOOR ||
-                tiles[x-1][y+1] == Tileset.FLOOR ||
-                tiles[x-1][y-1] == Tileset.FLOOR ||
-                tiles[x-1][y+1] == Tileset.FLOOR ||
-                tiles[x+1][y-1] == Tileset.FLOOR ||
-                tiles[x+1][y+1] == Tileset.FLOOR;
+        return tiles[x - 1][y] == Tileset.FLOOR
+                || tiles[x + 1][y] == Tileset.FLOOR
+                || tiles[x][y - 1] == Tileset.FLOOR
+                || tiles[x - 1][y + 1] == Tileset.FLOOR
+                || tiles[x - 1][y - 1] == Tileset.FLOOR
+                || tiles[x - 1][y + 1] == Tileset.FLOOR
+                || tiles[x + 1][y - 1] == Tileset.FLOOR
+                || tiles[x + 1][y + 1] == Tileset.FLOOR;
     }
 
     private void generateDoor() {
@@ -106,8 +106,8 @@ public class World implements Serializable {
             Position wallPos = wallList.get(i);
             int x = wallPos.x;
             int y = wallPos.y;
-            if (tiles[x-1][y] == Tileset.FLOOR || tiles[x+1][y] == Tileset.FLOOR ||
-                    tiles[x][y-1] == Tileset.FLOOR || tiles[x][y+1] == Tileset.FLOOR) {
+            if (tiles[x - 1][y] == Tileset.FLOOR || tiles[x + 1][y] == Tileset.FLOOR
+                    || tiles[x][y - 1] == Tileset.FLOOR || tiles[x][y + 1] == Tileset.FLOOR) {
                 tiles[x][y] =  Tileset.LOCKED_DOOR;
                 return;
             }
@@ -117,8 +117,8 @@ public class World implements Serializable {
     private void generatePlayer() {
         int i = RANDOM.nextInt(roomList.size());
         Room room = roomList.get(i);
-        int x = RANDOM.nextInt(room.pos.x, room.pos.x + room.width);
-        int y = RANDOM.nextInt(room.pos.y, room.pos.y + room.height);
+        int x = RANDOM.nextInt(room.width) + room.pos.x;
+        int y = RANDOM.nextInt(room.height) + room.pos.y;
         player = new Position(x, y);
         tiles[x][y] = Tileset.PLAYER;
     }
@@ -143,11 +143,11 @@ public class World implements Serializable {
                 default:
                     System.out.println("Unrecognized path!");
             }
-            if (tiles[nextX][nextY].character() == 183 || tiles[nextX][nextY].character() == 9608){
+            if (tiles[nextX][nextY].character() == 183 || tiles[nextX][nextY].character() == 9608) {
                 tiles[player.x][player.y] =  Tileset.FLOOR;
                 player.x = nextX;
                 player.y = nextY;
-                if (tiles[nextX][nextY].character() == 183){
+                if (tiles[nextX][nextY].character() == 183) {
                     tiles[player.x][player.y] =  Tileset.PLAYER;
                 } else {
                     tiles[player.x][player.y] =  Tileset.UNLOCKED_DOOR;
