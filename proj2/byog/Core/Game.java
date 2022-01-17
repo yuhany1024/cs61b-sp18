@@ -2,12 +2,14 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import java.io.*;
 
-public class Game {
+public class Game implements Serializable {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
+    public static World world;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -31,8 +33,84 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
+        input = input.toLowerCase();
+        // initialize the world
+        if (input.charAt(0) == 'n') { // new world
+            long seed = getSeed(input);
+            world = new World(WIDTH, HEIGHT, seed);
+        } else if (input.charAt(0) == 'l') { // load the world
+            world = loadWorld();
+        }
+        // get player's position
+        String playerPath = getPlayerPath(input);
+        world.movePlayer(playerPath);
+        // save the world
+        if (input.charAt(input.length()-2) == ':') {
+            saveWorld(world);
+        }
 
-        TETile[][] finalWorldFrame = null;
-        return finalWorldFrame;
+        return world.tiles;
+    }
+
+    private long getSeed(String input) {
+        int index = 1;
+        while(input.charAt(index) != 's') {
+            index += 1;
+        }
+        return Integer.parseInt(input.substring(1,Math.min(index, input.length())));
+    }
+
+    private String getPlayerPath(String input) {
+        if (input.charAt(0) == 'n') {
+            int start = 1;
+            while(start < input.length() && input.charAt(start) != 's') {
+                start += 1;
+            }
+            if (input.charAt(input.length()-2) == ':') {
+                return input.substring(start+1, input.length()-2);
+            } else {
+                return input.substring(start+1, input.length());
+            }
+        } else {
+            if (input.charAt(input.length()-2) == ':') {
+                return input.substring(1, input.length()-2);
+            } else {
+                return input.substring(1, input.length());
+            }
+        }
+
+    }
+
+    private void saveWorld(World world) {
+        File f = new File("./world.txt");
+        try {
+            FileOutputStream fs = new FileOutputStream(f);
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(world);
+            System.out.println("Save the world in world.txt!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private World loadWorld() {
+        File f = new File("./world.txt");
+        if (f.exists()) {
+            try {
+                FileInputStream fs = new FileInputStream(f);
+                ObjectInputStream os = new ObjectInputStream(fs);
+                return (World) os.readObject();
+            } catch (FileNotFoundException e) {
+                System.out.println("file not found");
+                System.exit(0);
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
+            } catch (ClassNotFoundException e) {
+                System.out.println("class not found");
+                System.exit(0);
+            }
+        }
+        throw new RuntimeException("no file exists");
     }
 }
