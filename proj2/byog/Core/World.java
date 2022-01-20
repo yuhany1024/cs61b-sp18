@@ -124,9 +124,9 @@ public class World implements Serializable {
     }
 
     public boolean movePlayer(String path) {
-        int nextX = player.x;
-        int nextY = player.y;
         for (int i = 0; i < path.length(); i++) {
+            int nextX = player.x;
+            int nextY = player.y;
             switch (path.charAt(i)) {
                 case 'w':
                     nextY += 1;
@@ -143,11 +143,12 @@ public class World implements Serializable {
                 default:
                     continue;
             }
-            if (tiles[nextX][nextY].character() == 183 || tiles[nextX][nextY].character() == 9608) {
+            if (tiles[nextX][nextY].description().equals("floor")
+                    || tiles[nextX][nextY].description().equals("locked door")) {
                 tiles[player.x][player.y] =  Tileset.FLOOR;
                 player.x = nextX;
                 player.y = nextY;
-                if (tiles[nextX][nextY].character() == 183) {
+                if (tiles[nextX][nextY].description().equals("floor")) {
                     tiles[player.x][player.y] =  Tileset.PLAYER;
                 } else {
                     tiles[player.x][player.y] =  Tileset.UNLOCKED_DOOR;

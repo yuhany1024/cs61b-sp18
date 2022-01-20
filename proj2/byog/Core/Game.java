@@ -4,7 +4,8 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import edu.princeton.cs.introcs.StdDraw;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Color;
 import java.io.Serializable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -139,7 +140,8 @@ public class Game implements Serializable {
                 saveWorld();
                 playWithKeyboard();
             }
-            if  (currentKey == 's' || currentKey ==  'a' || currentKey == 'd' ||  currentKey == 'w') {
+            if  (currentKey == 's' || currentKey ==  'a' || currentKey == 'd'
+                    ||  currentKey == 'w') {
                 gameWin = world.movePlayer(Character.toString(currentKey));
                 infoBottom = Character.toString(currentKey);
                 renderWorld();
