@@ -123,7 +123,7 @@ public class World implements Serializable {
         tiles[x][y] = Tileset.PLAYER;
     }
 
-    public void movePlayer(String path) {
+    public boolean movePlayer(String path) {
         int nextX = player.x;
         int nextY = player.y;
         for (int i = 0; i < path.length(); i++) {
@@ -141,6 +141,7 @@ public class World implements Serializable {
                     nextX += 1;
                     break;
                 default:
+                    continue;
             }
             if (tiles[nextX][nextY].character() == 183 || tiles[nextX][nextY].character() == 9608) {
                 tiles[player.x][player.y] =  Tileset.FLOOR;
@@ -150,10 +151,10 @@ public class World implements Serializable {
                     tiles[player.x][player.y] =  Tileset.PLAYER;
                 } else {
                     tiles[player.x][player.y] =  Tileset.UNLOCKED_DOOR;
-                    return;
+                    return true;
                 }
-
             }
         }
+        return false;
     }
 }
