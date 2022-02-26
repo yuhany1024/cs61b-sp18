@@ -1,5 +1,5 @@
 package hw2;
-
+import java.util.HashSet;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
@@ -21,6 +21,7 @@ public class Percolation {
         }
 
         disjointSet = new WeightedQuickUnionUF(N * N);
+
     }
 
     public void open(int row, int col) {
@@ -61,7 +62,7 @@ public class Percolation {
         if (!grid[row][col]) {
             return false;
         }
-        
+
         if (row == 0) {
             return true;
         } else {
@@ -89,8 +90,15 @@ public class Percolation {
 
     public boolean percolates() {
         // does the system percolate?
+        HashSet<Integer> parents = new HashSet<Integer>();
         for (int i = 0; i < N; i++) {
-            if (isFull(N - 1, i)) {
+            int p = disjointSet.find(i);
+            parents.add(p);
+        }
+
+        for (int i = 0; i < N; i++) {
+            int p = disjointSet.find((N - 1) * N + i);
+            if (parents.contains(p)) {
                 return true;
             }
         }
