@@ -57,7 +57,7 @@ public class Percolation {
         if (!isValidPos(row, col)) {
             throw new java.lang.IndexOutOfBoundsException("Must input a valid position!");
         }
-        if (row == 0) {
+        if (row == 0 && grid[row][col]) {
             return true;
         } else {
             for (int i = 0; i < N; i++) {
