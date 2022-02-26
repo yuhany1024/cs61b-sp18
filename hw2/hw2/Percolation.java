@@ -45,13 +45,12 @@ public class Percolation {
             if (isValidPos(row, col - 1) && grid[row][col - 1]) {
                 disjointSet.union(row * N + col - 1, row * N + col);
             }
-        }
-
-        if (row == 0) {
-            disjointSet.union(col, top);
-        }
-        if (row == N - 1) {
-            disjointSet.union((N - 1) * N + col, bottom);
+            if (row == 0) {
+                disjointSet.union(col, top);
+            }
+            if (row == N - 1) {
+                disjointSet.union((N - 1) * N + col, bottom);
+            }
         }
     }
 
@@ -67,6 +66,10 @@ public class Percolation {
         // is the site (row, col) full?}
         if (!isValidPos(row, col)) {
             throw new java.lang.IndexOutOfBoundsException("Must input a valid position!");
+        }
+
+        if (!grid[row][col]) {
+            return false;
         }
 
         return disjointSet.connected(top, row * N + col);
