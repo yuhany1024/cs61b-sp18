@@ -1,11 +1,12 @@
 package hw2;
-import java.util.HashSet;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private boolean[][] grid;
     private int N;
     private WeightedQuickUnionUF disjointSet;
+    private int top;
+    private int bottom;
 
     public  Percolation(int N) {
         //  create N-by-N grid, with all sites initially blocked
@@ -20,8 +21,9 @@ public class Percolation {
             }
         }
 
-        disjointSet = new WeightedQuickUnionUF(N * N);
-
+        disjointSet = new WeightedQuickUnionUF(N * N + 2);
+        top = N * N;
+        bottom = N * N + 1;
     }
 
     public void open(int row, int col) {
@@ -44,6 +46,13 @@ public class Percolation {
                 disjointSet.union(row * N + col - 1, row * N + col);
             }
         }
+
+        if (row == 0) {
+            disjointSet.union(col, top);
+        }
+        if (row == N - 1) {
+            disjointSet.union((N - 1) * N + col, bottom);
+        }
     }
 
     public boolean isOpen(int row, int col) {
@@ -53,26 +62,14 @@ public class Percolation {
         }
         return grid[row][col];
     }
+
     public boolean isFull(int row, int col) {
         // is the site (row, col) full?}
         if (!isValidPos(row, col)) {
             throw new java.lang.IndexOutOfBoundsException("Must input a valid position!");
         }
 
-        if (!grid[row][col]) {
-            return false;
-        }
-
-        if (row == 0) {
-            return true;
-        } else {
-            for (int i = 0; i < N; i++) {
-                if (disjointSet.connected(i, row * N + col)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        return disjointSet.connected(top, row * N + col);
     }
 
     public int numberOfOpenSites() {
@@ -90,19 +87,7 @@ public class Percolation {
 
     public boolean percolates() {
         // does the system percolate?
-        HashSet<Integer> parents = new HashSet<Integer>();
-        for (int i = 0; i < N; i++) {
-            int p = disjointSet.find(i);
-            parents.add(p);
-        }
-
-        for (int i = 0; i < N; i++) {
-            int p = disjointSet.find((N - 1) * N + i);
-            if (parents.contains(p)) {
-                return true;
-            }
-        }
-        return false;
+        return disjointSet.connected(top, bottom);
     }
 
     private boolean isValidPos(int row, int col) {
