@@ -5,8 +5,10 @@ public class Percolation {
     private boolean[][] grid;
     private int N;
     private WeightedQuickUnionUF disjointSet;
+    private WeightedQuickUnionUF disjointSetNoBW; // no backwash
     private int top;
     private int bottom;
+    private int nOpenSites = 0;
 
     public  Percolation(int N) {
         //  create N-by-N grid, with all sites initially blocked
@@ -22,6 +24,7 @@ public class Percolation {
         }
 
         disjointSet = new WeightedQuickUnionUF(N * N + 2);
+        disjointSetNoBW = new WeightedQuickUnionUF(N * N + 1);
         top = N * N;
         bottom = N * N + 1;
     }
@@ -33,20 +36,26 @@ public class Percolation {
         }
         if (!grid[row][col]) {
             grid[row][col] = true;
+            nOpenSites += 1;
             if (isValidPos(row - 1, col) && grid[row - 1][col]) {
                 disjointSet.union((row - 1) * N + col, row * N + col);
+                disjointSetNoBW.union((row - 1) * N + col, row * N + col);
             }
             if (isValidPos(row + 1, col) && grid[row + 1][col]) {
                 disjointSet.union((row + 1) * N + col, row * N + col);
+                disjointSetNoBW.union((row + 1) * N + col, row * N + col);
             }
             if (isValidPos(row, col + 1) && grid[row][col + 1]) {
                 disjointSet.union(row * N + col + 1, row * N + col);
+                disjointSetNoBW.union(row * N + col + 1, row * N + col);
             }
             if (isValidPos(row, col - 1) && grid[row][col - 1]) {
                 disjointSet.union(row * N + col - 1, row * N + col);
+                disjointSetNoBW.union(row * N + col - 1, row * N + col);
             }
             if (row == 0) {
                 disjointSet.union(col, top);
+                disjointSetNoBW.union(col, top);
             }
             if (row == N - 1) {
                 disjointSet.union((N - 1) * N + col, bottom);
@@ -68,24 +77,12 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException("Must input a valid position!");
         }
 
-        if (!grid[row][col]) {
-            return false;
-        }
-
-        return disjointSet.connected(top, row * N + col);
+        return disjointSetNoBW.connected(top, row * N + col);
     }
 
     public int numberOfOpenSites() {
         // number of open sites
-        int count = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (isOpen(i, j)) {
-                    count += 1;
-                }
-            }
-        }
-        return count;
+        return nOpenSites;
     }
 
     public boolean percolates() {
