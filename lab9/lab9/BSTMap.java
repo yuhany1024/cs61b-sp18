@@ -152,6 +152,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         // find the inorder successor
         if (p.left == null && p.right == null) {
             return p;
+        } else if (p.left == null) {
+            return minNode(p.right);
         } else {
             return minNode(p.left);
         }
