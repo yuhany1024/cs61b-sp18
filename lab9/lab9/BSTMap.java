@@ -140,7 +140,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 Node inorderSuccessor = minNode(p.right);
                 p.key = inorderSuccessor.key;
                 p.value = inorderSuccessor.value;
-                removeHelper(p.right, key);
+                p.right = removeHelper(p.right, key);
             }
             size -= 1;
         } else if (p.key.compareTo(key) > 0) {
