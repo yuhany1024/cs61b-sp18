@@ -142,7 +142,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 p.value = inorderSuccessor.value;
                 p.right = removeHelper(p.right, key);
             }
-            size -= 1;
+
         } else if (p.key.compareTo(key) > 0) {
             p.left = removeHelper(p.left, key);
         } else if (p.key.compareTo(key) < 0) {
@@ -168,6 +168,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public V remove(K key) {
         V value = get(key);
         if (value != null) {
+            size -= 1;
             root = removeHelper(root, key);
         }
         return value;
@@ -181,6 +182,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public V remove(K key, V value) {
         V value4key = get(key);
         if (value4key == value) {
+            size -= 1;
             root = removeHelper(root, key);
             return value;
         } else {
