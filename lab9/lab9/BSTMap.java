@@ -168,10 +168,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
+        boolean flag = (root.key == key);
         V value = get(key);
         if (value != null) {
             Node p = removeHelper(root, key);
-            if (root.key == key) {
+            if (flag) {
                 root = p;
             }
         }
@@ -184,10 +185,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
+        boolean flag = (root.key == key);
         V value4key = get(key);
         if (value4key == value) {
             Node p = removeHelper(root, key);
-            if (root.key == key) {
+            if (flag) {
                 root = p;
             }
             return value;
