@@ -153,10 +153,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     private Node minNode(Node p) {
         // find the inorder successor
-        if (p.left == null && p.right == null) {
+        if (p.left == null) {
             return p;
-        } else if (p.left == null) {
-            return minNode(p.right);
         } else {
             return minNode(p.left);
         }
