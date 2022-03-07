@@ -216,7 +216,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
         int index = 0;
-        for (int i = 0; i <= size; i++) {
+        for (int i = 1; i <= size; i++) {
             if (contents[i].item().equals(item)) {
                 index = i;
                 contents[i].myPriority = priority;
