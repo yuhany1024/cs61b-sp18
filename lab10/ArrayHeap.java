@@ -167,7 +167,11 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public T peek() {
         /* TODO: Your code here! */
-        return contents[1].item();
+        if (size == 0){
+            return null;
+        } else{
+            return contents[1].item();
+        }
     }
 
     /**
