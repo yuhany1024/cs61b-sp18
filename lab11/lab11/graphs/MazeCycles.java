@@ -12,7 +12,7 @@ public class MazeCycles extends MazeExplorer {
     public boolean[] marked;
     */
     private Maze maze;
-    public int[] visited; //0: not visited; 1: in progress; 2: visited
+    private int[] visited; //0: not visited; 1: in progress; 2: visited
     private int[] path;
     private int pathSize = 0;
     private boolean findLoop = false;
@@ -27,9 +27,8 @@ public class MazeCycles extends MazeExplorer {
 
     @Override
     public void solve() {
-        // TODO: Your code here!
         for (int s = 0; s < maze.V(); s++) {
-            if (visited[s] == 0){
+            if (visited[s] == 0) {
                 path[pathSize] = s;
                 pathSize += 1;
                 dfs(s, s);
@@ -75,10 +74,10 @@ public class MazeCycles extends MazeExplorer {
     }
 
     private void drawLoop() {
-        for (int i = pathSize-1; i>=1; i--) {
-            edgeTo[path[i]] = path[i-1];
+        for (int i = pathSize - 1; i >= 1; i--) {
+            edgeTo[path[i]] = path[i - 1];
             announce();
-            if (path[i-1] == path[pathSize-1]) {
+            if (path[i - 1] == path[pathSize  - 1]) {
                 return;
             }
         }
