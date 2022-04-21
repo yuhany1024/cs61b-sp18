@@ -30,6 +30,8 @@ public class MazeBreadthFirstPaths extends MazeExplorer {
     /** Conducts a breadth first search of the maze starting at the source. */
     private void bfs() {
         fringe.add(s);
+        marked[s] = true;
+        announce();
         while (!fringe.isEmpty()) {
             int v = fringe.remove();
             for (int w : maze.adj(v)) {
@@ -50,9 +52,6 @@ public class MazeBreadthFirstPaths extends MazeExplorer {
 
     @Override
     public void solve() {
-        if (s==t) {
-            return;
-        }
         bfs();
     }
 }
