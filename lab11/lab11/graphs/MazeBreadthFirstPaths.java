@@ -50,6 +50,9 @@ public class MazeBreadthFirstPaths extends MazeExplorer {
 
     @Override
     public void solve() {
+        if (s==t) {
+            return;
+        }
         bfs();
     }
 }
