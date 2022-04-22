@@ -61,12 +61,10 @@ public class Board implements WorldState {
         int nWrongs = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (i == N - 1 && j == N - 1) {
-                    if (tiles[i][j] != 0) {
+                if (!(i == N - 1 && j == N - 1)) {
+                    if (tiles[i][j] != 0 && tiles[i][j] != i * N + j + 1) {
                         nWrongs += 1;
                     }
-                } else if (tiles[i][j] != i * N + j + 1) {
-                    nWrongs += 1;
                 }
             }
         }
@@ -77,9 +75,7 @@ public class Board implements WorldState {
         int dist = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (tiles[i][j] == 0) {
-                    dist += Math.abs(i - (N - 1)) + Math.abs(j - (N - 1));
-                } else {
+                if (tiles[i][j] != 0) {
                     int corretI = (tiles[i][j] - 1) / N;
                     int corretJ = (tiles[i][j] - 1) % N;
                     dist += Math.abs(i - corretI) + Math.abs(j - corretJ);
@@ -94,13 +90,23 @@ public class Board implements WorldState {
     }
 
     public boolean equals(Object y) {
-        if (y.getClass() == this.getClass()) {
+        if (y != null && y.getClass() == this.getClass()) {
             Board b = (Board) y;
             return b.size() == this.size()
                     && isEqual(b.tiles, this.tiles);
         } else {
             return false;
         }
+    }
+
+    public int hashCode() {
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                sum = (sum + tiles[i][j]) * 31;
+            }
+        }
+        return sum;
     }
 
     /** Returns the string representation of the board.

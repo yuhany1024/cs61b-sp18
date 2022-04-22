@@ -10,7 +10,7 @@ public class Solver {
     private MinPQ<SearchNode> pq;
     private  List<WorldState> sequence;
     private SearchNode lastNode = null;
-    public int nNodeEnque = 0;
+    private int nNodeEnque = 0;
 
     public Solver(WorldState initial) {
         initState = initial;
@@ -27,7 +27,8 @@ public class Solver {
                 break;
             }
             for (WorldState nextState: node.wordState.neighbors()) {
-                if (node.lastSearchNode != null && nextState.equals(node.lastSearchNode.wordState)) {
+                if (node.lastSearchNode != null
+                        && nextState.equals(node.lastSearchNode.wordState)) {
                     continue;
                 }
                 SearchNode nextNode = new SearchNode(nextState, node.nMoves + 1, node);
@@ -43,7 +44,7 @@ public class Solver {
 
     public Iterable<WorldState> solution() {
         SearchNode node = lastNode;
-        while(node != null) {
+        while (node != null) {
             sequence.add(node.wordState);
             node = node.lastSearchNode;
         }
