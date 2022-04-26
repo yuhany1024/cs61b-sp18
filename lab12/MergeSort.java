@@ -83,15 +83,18 @@ public class MergeSort {
         if (items.size() <= 1) {
             return items;
         }
+        Queue<Item> itemsCopy =  new Queue<>();
+        for (Item item: items) {
+            itemsCopy.enqueue(item);
+        }
         Queue<Item> leftQ = new Queue<>();
         Queue<Item> rightQ = new Queue<>();
-        int size = items.size();
-        for (int i = 0; i < size / 2; i++) {
-            Item item = items.dequeue();
+        for (int i = 0; i < itemsCopy.size() / 2; i++) {
+            Item item = itemsCopy.dequeue();
             leftQ.enqueue(item);
         }
-        while (!items.isEmpty()) {
-            Item item = items.dequeue();
+        while (!itemsCopy.isEmpty()) {
+            Item item = itemsCopy.dequeue();
             rightQ.enqueue(item);
         }
         leftQ = mergeSort(leftQ);
