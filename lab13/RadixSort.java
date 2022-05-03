@@ -22,7 +22,7 @@ public class RadixSort {
         }
         String[] sorted = new String[asciis.length];
         System.arraycopy(asciis, 0, sorted, 0, asciis.length);
-        for (int d = 0; d < numDigits; d++) {
+        for (int d = numDigits - 1; d >= 0; d--) {
             sorted = sortHelperLSD(sorted, d);
         }
         return sorted;
@@ -45,8 +45,8 @@ public class RadixSort {
         }
         int[] startIndex = new int[256];
         startIndex[0] = 0;
-        for (int i = 1; i <256; i++) {
-            startIndex[i] = startIndex[i-1] + counts[i-1];
+        for (int i = 1; i < 256; i++) {
+            startIndex[i] = startIndex[i - 1] + counts[i - 1];
         }
 
         String[] sorted = new String[asciis.length];
