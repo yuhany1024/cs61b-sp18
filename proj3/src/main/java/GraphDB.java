@@ -3,10 +3,13 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.util.ArrayList;
 
 /**
  * Graph for storing all of the intersection (vertex) and road (edge) information.
@@ -20,7 +23,8 @@ import java.util.ArrayList;
 public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
-
+    Map<Long, Node> nodes = new LinkedHashMap<>();
+    private Map<Long, Way> ways = new LinkedHashMap<>();
     /**
      * Example constructor shows how to create and start an XML parser.
      * You do not need to modify this constructor, but you're welcome to do so.
@@ -57,7 +61,16 @@ public class GraphDB {
      *  we can reasonably assume this since typically roads are connected.
      */
     private void clean() {
-        // TODO: Your code here.
+        List<Long> removeID = new ArrayList<>();
+        for (long nodeID: nodes.keySet()) {
+            Node node = nodes.get(nodeID);
+            if (node.adjNodes.size() == 0) {
+                removeID.add(nodeID);
+            }
+        }
+        for (long id: removeID) {
+            nodes.remove(id);
+        }
     }
 
     /**
@@ -66,7 +79,7 @@ public class GraphDB {
      */
     Iterable<Long> vertices() {
         //YOUR CODE HERE, this currently returns only an empty list.
-        return new ArrayList<Long>();
+        return nodes.keySet();
     }
 
     /**
@@ -75,7 +88,8 @@ public class GraphDB {
      * @return An iterable of the ids of the neighbors of v.
      */
     Iterable<Long> adjacent(long v) {
-        return null;
+        Node node = nodes.get(v);
+        return node.adjNodes;
     }
 
     /**
@@ -136,7 +150,18 @@ public class GraphDB {
      * @return The id of the node in the graph closest to the target.
      */
     long closest(double lon, double lat) {
-        return 0;
+        double minDist = 1e10;
+        long res = 0;
+        for (long nodeID : nodes.keySet()) {
+            double lon2 = lon(nodeID);
+            double lat2 = lat(nodeID);
+            double dist = distance(lon, lat, lon2, lat2);
+            if (dist < minDist) {
+                minDist = dist;
+                res = nodeID;
+            }
+        }
+        return res;
     }
 
     /**
@@ -145,7 +170,8 @@ public class GraphDB {
      * @return The longitude of the vertex.
      */
     double lon(long v) {
-        return 0;
+        Node node = nodes.get(v);
+        return node.lon;
     }
 
     /**
@@ -154,6 +180,71 @@ public class GraphDB {
      * @return The latitude of the vertex.
      */
     double lat(long v) {
-        return 0;
+        Node node = nodes.get(v);
+        return node.lat;
+    }
+
+    void addNode(Node node) {
+        nodes.put(node.id, node);
+    }
+
+    Node getNode(long nodeID) {
+        return nodes.get(nodeID);
+    }
+
+    void addWay(Way way) {
+        ways.put(way.id, way);
+    }
+
+    // some helper classes
+    static class Node {
+        long id;
+        double lon;
+        double lat;
+        private String nodeName = "";
+        List<Long> adjNodes = new ArrayList<>();
+
+        Node(long id, double lon, double lat) {
+            this.id = id;
+            this.lat = lat;
+            this.lon = lon;
+        }
+
+        void setNodeName(String nodeName) {
+            this.nodeName = nodeName;
+        }
+
+        void addAdjNode(long nodeID) {
+            adjNodes.add(nodeID);
+        }
+
+    }
+
+    static class Way {
+        long id;
+        List<Node> nodesOnWay = new ArrayList<>();
+        private boolean validWay = false;
+        private String wayName = "";
+
+        Way(long id) {
+            this.id = id;
+        }
+
+        void addNodeOnWay(Node node) {
+            nodesOnWay.add(node);
+        }
+
+        void setHighway() {
+            this.validWay = true;
+        }
+
+        void setWayName(String wayName) {
+            this.wayName = wayName;
+        }
+
+        boolean isValid() {
+            return validWay;
+        }
+
     }
 }

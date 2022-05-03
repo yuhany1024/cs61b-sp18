@@ -1,7 +1,12 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Collections;
+import java.util.Objects;
 
 /**
  * This class provides a shortestPath method for finding routes between two points
@@ -23,9 +28,64 @@ public class Router {
      * @param destlat The latitude of the destination location.
      * @return A list of node id's in the order visited on the shortest path.
      */
+
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+        HashMap<Long, Double> distTo = new HashMap<>();
+        HashMap<Long, Long> edgeTo = new HashMap<>();
+        List<Long> route = new ArrayList<>();
+
+        class NodeComparator implements Comparator<GraphDB.Node> {
+            @Override
+            public int compare(GraphDB.Node n1, GraphDB.Node n2) {
+                double d1 = distTo.get(n1.id) + GraphDB.distance(n1.lon, n1.lat, destlon, destlat);
+                double d2 = distTo.get(n2.id) + GraphDB.distance(n2.lon, n2.lat, destlon, destlat);
+                return Double.compare(d1, d2);
+            }
+        }
+
+        long startNodeId = g.closest(stlon, stlat);
+        long endNodeId = g.closest(destlon, destlat);
+        route.add(endNodeId);
+        if (startNodeId == endNodeId) {
+            return route;
+        }
+
+        PriorityQueue<GraphDB.Node> fringe = new PriorityQueue<>(new NodeComparator());
+        for (long nodeID: g.nodes.keySet()) {
+            if (nodeID == startNodeId) {
+                distTo.put(nodeID, 0.0);
+            } else {
+                distTo.put(nodeID, Double.MAX_VALUE);
+            }
+            fringe.add(g.nodes.get(nodeID));
+        }
+
+
+        while (!fringe.isEmpty()) {
+            GraphDB.Node node = fringe.poll();
+            for (long nextNodeID: node.adjNodes) {
+                GraphDB.Node nextNode = g.getNode(nextNodeID);
+                double dist = distTo.get(node.id) + g.distance(node.id, nextNodeID);
+                if (dist < distTo.get(nextNodeID)) {
+                    distTo.put(nextNodeID, dist);
+                    edgeTo.put(nextNodeID, node.id);
+                    fringe.remove(nextNode);
+                    fringe.add(nextNode);
+                }
+            }
+
+            if (node.id == endNodeId) {
+                long p = endNodeId;
+                while (p != startNodeId) {
+                    route.add(edgeTo.get(p));
+                    p = edgeTo.get(p);
+                }
+                Collections.reverse(route);
+                return route;
+            }
+        }
+        return null;
     }
 
     /**
