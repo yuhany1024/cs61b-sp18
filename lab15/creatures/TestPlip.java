@@ -7,7 +7,6 @@ import huglife.Direction;
 import huglife.Action;
 import huglife.Occupant;
 import huglife.Impassible;
-import huglife.Empty;
 
 /** Tests the plip class   
  *  @authr FIXME
@@ -36,10 +35,12 @@ public class TestPlip {
 
     @Test
     public void testReplicate() {
-
+        Plip p = new Plip(2);
+        Plip child = p.replicate();
+        assertNotSame(p, child);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
         Plip p = new Plip(1.2);
         HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
