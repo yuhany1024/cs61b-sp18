@@ -5,7 +5,7 @@ public class SeamCarver {
     private Picture picture;
 
     public SeamCarver(Picture picture) {
-        this.picture = picture;
+        this.picture = new Picture(picture);
     }
 
     public Picture picture() {
