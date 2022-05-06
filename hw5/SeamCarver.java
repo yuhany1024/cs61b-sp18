@@ -1,5 +1,4 @@
 import edu.princeton.cs.algs4.Picture;
-
 import java.awt.Color;
 
 public class SeamCarver {
@@ -66,13 +65,13 @@ public class SeamCarver {
         return seam;
     }
 
-    private int min(int row, int col) {
+    private int min(double[][] arr, int row, int col) {
         // find which pixel has  the lowest energy
         // (row, col),  (row,  col - 1), (row, col + 1)
-        int res = (col - 1 >= 0 && energy(col - 1, row) < energy(col, row)) ? -1 : 0;
-        double minEnergy = (col - 1 >= 0 && energy(col - 1, row) < energy(col, row))
-                ? energy(col - 1, row) : energy(col, row);
-        res = (col + 1 < width() && energy(col + 1, row) < minEnergy) ? 1 : res;
+        int res = (col - 1 >= 0 && arr[row][col - 1] < arr[row][col]) ? -1 : 0;
+        double minEnergy = (col - 1 >= 0 && arr[row][col - 1] < arr[row][col])
+                ? arr[row][col - 1] : arr[row][col];
+        res = (col + 1 < width() && arr[row][col + 1] < minEnergy) ? 1 : res;
         return res;
     }
 
@@ -100,16 +99,14 @@ public class SeamCarver {
         }
         for (int i = 1; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                int p = min(i - 1, j);
-                minEnergy[i][j] = energy(j, i) + energy(j + p, i - 1);
+                int p = min(minEnergy, i - 1, j);
+                minEnergy[i][j] = energy(j, i) + minEnergy[i - 1][j + p];
                 path[i][j] = j + p;
             }
         }
-        int index = argMin(minEnergy[h - 1]);
-        seam[h - 1] = index;
+        seam[h - 1] = argMin(minEnergy[h - 1]);
         for (int i = h - 2; i >= 0; i--) {
-            seam[i] = path[i][index];
-            index = path[i][index];
+            seam[i] = path[i + 1][seam[i + 1]];
         }
         return seam;
     }
@@ -145,4 +142,5 @@ public class SeamCarver {
         }
         return true;
     }
+
 }
