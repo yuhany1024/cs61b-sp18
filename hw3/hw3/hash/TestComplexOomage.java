@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestComplexOomage {
@@ -33,18 +34,59 @@ public class TestComplexOomage {
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
     }
 
-    /* TODO: Create a list of Complex Oomages called deadlyList
+    /* Create a list of Complex Oomages called deadlyList
      * that shows the flaw in the hashCode function.
      */
-    /*
     @Test
     public void testWithDeadlyParams() {
         List<Oomage> deadlyList = new ArrayList<>();
 
-        // Your code here.
+        /* Apart from the hint, another way to fail is to make all the hash codes fall in the same
+        bucket, in this case: 0. For that, every hash code has to be a multiple of 10. */
+        Integer[] paramArr00 = new Integer[]{255, 255, 255, 255};
+        Integer[] paramArr01 = new Integer[]{10, 255, 255, 255, 255};
+        Integer[] paramArr02 = new Integer[]{5, 255, 255, 255, 255};
+        Integer[] paramArr03 = new Integer[]{0, 255, 255, 255, 255};
+        Integer[] paramArr04 = new Integer[]{1, 255, 255, 255, 255};
+        Integer[] paramArr05 = new Integer[]{50, 255, 255, 255, 255};
+        Integer[] paramArr06 = new Integer[]{10, 0, 255, 255, 255, 255};
+        Integer[] paramArr07 = new Integer[]{10, 3, 255, 255, 255, 255};
+        Integer[] paramArr08 = new Integer[]{7, 255, 255, 255, 255};
+        Integer[] paramArr09 = new Integer[]{10, 4, 255, 255, 255, 255};
+        Integer[] paramArr10 = new Integer[]{100, 255, 255, 255, 255};
+        Integer[] paramArr11 = new Integer[]{150, 255, 255, 255, 255};
+        Integer[] paramArr12 = new Integer[]{160, 255, 255, 255, 255};
+        Integer[] paramArr13 = new Integer[]{170, 255, 255, 255, 255};
+        Integer[] paramArr14 = new Integer[]{200, 255, 255, 255, 255};
+        Integer[] paramArr15 = new Integer[]{7, 255, 255, 255, 255};
+
+        List<List<Integer>> paramsList = new ArrayList<>();
+        paramsList.add(Arrays.asList(paramArr00));
+        paramsList.add(Arrays.asList(paramArr01));
+        paramsList.add(Arrays.asList(paramArr02));
+        paramsList.add(Arrays.asList(paramArr03));
+        paramsList.add(Arrays.asList(paramArr04));
+        paramsList.add(Arrays.asList(paramArr05));
+        paramsList.add(Arrays.asList(paramArr06));
+        paramsList.add(Arrays.asList(paramArr07));
+        paramsList.add(Arrays.asList(paramArr08));
+        paramsList.add(Arrays.asList(paramArr09));
+        paramsList.add(Arrays.asList(paramArr10));
+        paramsList.add(Arrays.asList(paramArr11));
+        paramsList.add(Arrays.asList(paramArr12));
+        paramsList.add(Arrays.asList(paramArr13));
+        paramsList.add(Arrays.asList(paramArr14));
+        paramsList.add(Arrays.asList(paramArr15));
+
+        for (List<Integer> params : paramsList) {
+            deadlyList.add(new ComplexOomage(params));
+        }
+        for (int i = 0; i < 23; i++) {
+            deadlyList.add(ComplexOomage.randomComplexOomage());
+        }
 
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
-    } */
+    }
 
     /** Calls tests for SimpleOomage. */
     public static void main(String[] args) {
