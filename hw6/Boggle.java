@@ -1,16 +1,10 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Arrays;
 
 public class Boggle {
     
     // File path of dictionary file
-    static String dictPath = "words.txt";
+    static String dictPath = "trivial_words.txt";
     static String[] dictWords;
     static int m;
     static int n;
@@ -61,7 +55,7 @@ public class Boggle {
 
     private static List<String> bfs(char[][] board, int k) {
 
-        List<String> res = new ArrayList<>();
+        TreeSet<String> uniqueWords = new TreeSet<>(new strComparator());
         // initialize fringe
         Queue<BfsNode> fringe = new LinkedList<>();
         for (int i = 0; i < m; i++) {
@@ -80,7 +74,10 @@ public class Boggle {
         while (!fringe.isEmpty()) {
             BfsNode node = fringe.poll();
             if (dict.contains(node.word)) {
-                res.add(node.word);
+                uniqueWords.add(node.word);
+                if (uniqueWords.size() > k) {
+                    uniqueWords.pollLast();
+                }
             }
             List<Integer> nextPos = node.neighbors();
             for (int pos: nextPos) {
@@ -97,10 +94,8 @@ public class Boggle {
                 }
             }
         }
-        Set<String> uniqueWords = new TreeSet<>(res);
+
         List<String> result = new ArrayList<>(uniqueWords);
-        result = result.stream().sorted((s1, s2) -> s2.length() - s1.length())
-                .collect(Collectors.toList());
         int length = result.size() > k ? k : result.size();
         return result.subList(0, length);
     }
@@ -153,8 +148,18 @@ public class Boggle {
 
     public static void main(String[] args) {
         int k = 7;
-        String boardFilePath = "./exampleBoard.txt";
+        String boardFilePath = "./exampleBoard2.txt";
         List<String> res = solve(k, boardFilePath);
         System.out.println(Arrays.toString(res.toArray()));
+    }
+
+    static class strComparator implements Comparator<String>{
+        public int compare(String s1, String s2) {
+            if (s1.length() != s2.length()) {
+                return s2.length() - s1.length();
+            } else {
+                return s1.compareTo(s2);
+            }
+        }
     }
 }
