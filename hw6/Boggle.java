@@ -66,7 +66,7 @@ public class Boggle {
             for (int j = 0; j < n; j++) {
                 char c = board[i][j];
                 if (dictTrie.root.containChar(c)) {
-                    int pos = i * m + j;
+                    int pos = i * n + j;
                     Set<Integer> visited = new TreeSet<>();
                     visited.add(pos);
                     String word = String.valueOf(c);
