@@ -86,8 +86,8 @@ public class Boggle {
         }
         List<Integer> nextPos = dfsNode.neighbors();
         for (int pos: nextPos) {
-            int i = pos / m;
-            int j = pos % m;
+            int i = pos / n;
+            int j = pos % n;
             char c = board[i][j];
             if (!dfsNode.visited.contains(pos) && dfsNode.trieNode.containChar(c)) {
                 dfsNode.visited.add(pos);
