@@ -2,7 +2,6 @@ import java.util.TreeSet;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -13,8 +12,10 @@ public class Boggle {
     static String[] dictWords;
     static int m;
     static int n;
+    static int kwords;
     static Trie dictTrie;
     static Set<String> dict;
+    static TreeSet<String> uniqueWords;
 
     /**
      * Solves a Boggle puzzle.
@@ -28,7 +29,8 @@ public class Boggle {
      */
     public static List<String> solve(int k, String boardFilePath) {
         // YOUR CODE HERE
-        if (k <= 0) {
+        kwords = k;
+        if (kwords <= 0) {
             throw new IllegalArgumentException();
         }
         loadDict();
@@ -39,8 +41,9 @@ public class Boggle {
         char[][] board = loadBoard(boardFilePath);
         m = board.length;
         n = board[0].length;
-        List<String> res = bfs(board, k);
-        return res;
+        uniqueWords = new TreeSet<>(new StrComparator());
+        dfs(board);
+        return new ArrayList<>(uniqueWords);
     }
 
     private static void loadDict() {
@@ -58,61 +61,53 @@ public class Boggle {
         return letterGrid;
     }
 
-    private static List<String> bfs(char[][] board, int k) {
-
-        TreeSet<String> uniqueWords = new TreeSet<>(new StrComparator());
-        // initialize fringe
-        LinkedList<BfsNode> fringe = new LinkedList<>();
+    private static void dfs(char[][] board) {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                int pos = i * n + j;
-                Set<Integer> visited = new TreeSet<>();
-                visited.add(pos);
-                String word = String.valueOf(board[i][j]);
-                if (dictTrie.root.containChar(board[i][j])) {
-                    Trie.TrieNode nextNode = dictTrie.root.nextNode(board[i][j]);
-                    fringe.add(new BfsNode(pos, visited, word, nextNode));
-                }
-            }
-        }
-        // search
-        while (!fringe.isEmpty()) {
-            BfsNode node = fringe.poll();
-            if (dict.contains(node.word)) {
-                uniqueWords.add(node.word);
-                if (uniqueWords.size() > k) {
-                    uniqueWords.pollLast();
-                }
-            }
-            List<Integer> nextPos = node.neighbors();
-            for (int pos: nextPos) {
-                int i = pos / n;
-                int j = pos % n;
                 char c = board[i][j];
-                if (!node.visited.contains(pos)
-                        && node.trieNode.containChar(c)) {
-                    node.visited.add(pos);
-                    Trie.TrieNode trieNode = node.trieNode.nextNode(c);
-                    String word = node.word + c;
-                    fringe.add(new BfsNode(pos, node.visited, word, trieNode));
-                    node.visited.remove(pos);
+                if (dictTrie.root.containChar(c)) {
+                    int pos = i * m + j;
+                    Set<Integer> visited = new TreeSet<>();
+                    visited.add(pos);
+                    String word = String.valueOf(c);
+                    DfsNode dfsNode = new DfsNode(pos, visited, word, dictTrie.root.nextNode(c));
+                    dfs(board, dfsNode);
                 }
             }
         }
-
-        List<String> result = new ArrayList<>(uniqueWords);
-        return result;
     }
 
-    static class BfsNode {
+    private static void dfs(char[][] board, DfsNode dfsNode) {
+        if (dict.contains(dfsNode.word)) {
+            uniqueWords.add(dfsNode.word);
+            if (uniqueWords.size() > kwords) {
+                uniqueWords.pollLast();
+            }
+        }
+        List<Integer> nextPos = dfsNode.neighbors();
+        for (int pos: nextPos) {
+            int i = pos / m;
+            int j = pos % m;
+            char c = board[i][j];
+            if (!dfsNode.visited.contains(pos) && dfsNode.trieNode.containChar(c)) {
+                dfsNode.visited.add(pos);
+                String word = dfsNode.word + c;
+                DfsNode nextDfsNode = new DfsNode(pos, dfsNode.visited, word, dfsNode.trieNode.nextNode(c));
+                dfs(board, nextDfsNode);
+                dfsNode.visited.remove(pos);
+            }
+        }
+    }
+
+    static class DfsNode {
         private int pos;
         private Set<Integer> visited;
         private String word;
         private Trie.TrieNode trieNode;
 
-        BfsNode(int pos, Set<Integer> visited, String word, Trie.TrieNode trieNode) {
+        DfsNode(int pos, Set<Integer> visited, String word, Trie.TrieNode trieNode) {
             this.pos = pos;
-            this.visited = new TreeSet<>(visited);
+            this.visited = visited;
             this.word = word;
             this.trieNode = trieNode;
         }
