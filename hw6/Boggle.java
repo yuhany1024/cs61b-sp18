@@ -1,5 +1,10 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Boggle {
     
@@ -55,9 +60,9 @@ public class Boggle {
 
     private static List<String> bfs(char[][] board, int k) {
 
-        TreeSet<String> uniqueWords = new TreeSet<>(new strComparator());
+        TreeSet<String> uniqueWords = new TreeSet<>(new StrComparator());
         // initialize fringe
-        Queue<BfsNode> fringe = new LinkedList<>();
+        LinkedList<BfsNode> fringe = new LinkedList<>();
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 int pos = i * n + j;
@@ -153,7 +158,7 @@ public class Boggle {
         System.out.println(Arrays.toString(res.toArray()));
     }
 
-    static class strComparator implements Comparator<String>{
+    static class StrComparator implements Comparator<String> {
         public int compare(String s1, String s2) {
             if (s1.length() != s2.length()) {
                 return s2.length() - s1.length();
