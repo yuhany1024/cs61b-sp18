@@ -92,7 +92,8 @@ public class Boggle {
             if (!dfsNode.visited.contains(pos) && dfsNode.trieNode.containChar(c)) {
                 dfsNode.visited.add(pos);
                 String word = dfsNode.word + c;
-                DfsNode nextDfsNode = new DfsNode(pos, dfsNode.visited, word, dfsNode.trieNode.nextNode(c));
+                DfsNode nextDfsNode = new DfsNode(pos, dfsNode.visited, word,
+                        dfsNode.trieNode.nextNode(c));
                 dfs(board, nextDfsNode);
                 dfsNode.visited.remove(pos);
             }
