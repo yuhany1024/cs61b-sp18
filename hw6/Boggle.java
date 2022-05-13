@@ -9,7 +9,7 @@ import java.util.Comparator;
 public class Boggle {
     
     // File path of dictionary file
-    static String dictPath = "trivial_words.txt";
+    static String dictPath = "words.txt";
     static String[] dictWords;
     static int m;
     static int n;
@@ -101,8 +101,7 @@ public class Boggle {
         }
 
         List<String> result = new ArrayList<>(uniqueWords);
-        int length = result.size() > k ? k : result.size();
-        return result.subList(0, length);
+        return result;
     }
 
     static class BfsNode {
@@ -153,7 +152,7 @@ public class Boggle {
 
     public static void main(String[] args) {
         int k = 7;
-        String boardFilePath = "./exampleBoard2.txt";
+        String boardFilePath = "./exampleBoard.txt";
         List<String> res = solve(k, boardFilePath);
         System.out.println(Arrays.toString(res.toArray()));
     }
